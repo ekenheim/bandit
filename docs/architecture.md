@@ -144,17 +144,20 @@ Client → Seldon Gateway → thompson-router (bandit-service)
 
 ## Kubernetes Layout
 
+Manifests are in the cluster’s k8s repo (Flux-reconciled), not in this repo. Typical layout:
+
 ```
-k8s/datasci/bandit/
-├── ks.yaml                    # Flux Kustomization
+kubernetes/apps/datasci/bandit/
+├── ks.yaml                    # Flux Kustomization (targetNamespace: datasci)
 └── app/
     ├── kustomization.yaml
     ├── externalsecret.yaml    # bandit-minio + bandit-postgres
-    ├── db/postgres.yaml       # db.movetokube.com CRDs
     ├── pipeline/              # Dagster code location Deployment + Service
     ├── service/               # FastAPI Deployment + Service + Ingress
     └── seldon/                # SeldonDeployment bandit-router
 ```
+
+Postgres user/database for bandit is created via Crunchy (e.g. `postgres-pguser-bandit`); no in-repo DB CRs.
 
 ## CI/CD
 

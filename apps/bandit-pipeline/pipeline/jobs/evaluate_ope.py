@@ -16,14 +16,12 @@ Reference:
   Reproducible Off-Policy Evaluation" (NeurIPS 2021)
 """
 
-from __future__ import annotations
-
 import logging
 import os
 
 import mlflow
 import numpy as np
-from dagster import Config, OpExecutionContext, job, op
+from dagster import Config, job, op
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +35,7 @@ class OPEConfig(Config):
 
 
 @op
-def run_ope_evaluation(context: OpExecutionContext, config: OPEConfig) -> dict[str, float]:
+def run_ope_evaluation(context, config: OPEConfig) -> dict[str, float]:
     """
     Run OPE estimators on OBP data.
 
@@ -92,7 +90,7 @@ def run_ope_evaluation(context: OpExecutionContext, config: OPEConfig) -> dict[s
 
 @op
 def log_ope_to_mlflow(
-    context: OpExecutionContext, config: OPEConfig, policy_values: dict[str, float]
+    context, config: OPEConfig, policy_values: dict[str, float]
 ) -> None:
     """Log OPE results to MLflow."""
     mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)

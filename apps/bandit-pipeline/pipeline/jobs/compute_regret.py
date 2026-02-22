@@ -13,14 +13,12 @@ Results (regret curve, allocation ratios) are logged to MLflow at milestones:
 Target: < 40% cumulative regret of uniform allocation after 5000 events.
 """
 
-from __future__ import annotations
-
 import logging
 import os
 
 import mlflow
 import numpy as np
-from dagster import Config, OpExecutionContext, job, op
+from dagster import Config, job, op
 
 logger = logging.getLogger(__name__)
 
@@ -35,9 +33,7 @@ class RegretConfig(Config):
 
 
 @op
-def load_replay_rewards(
-    context: OpExecutionContext, config: RegretConfig
-) -> dict[str, np.ndarray]:
+def load_replay_rewards(context, config: RegretConfig) -> dict[str, np.ndarray]:
     """
     Load the arm selection and reward sequence from the OBP replay.
 
@@ -88,7 +84,7 @@ def load_replay_rewards(
 
 @op
 def log_regret_to_mlflow(
-    context: OpExecutionContext, config: RegretConfig, data: dict[str, np.ndarray]
+    context, config: RegretConfig, data: dict[str, np.ndarray]
 ) -> None:
     """Compute cumulative regret curves and log to MLflow."""
     mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)

@@ -7,15 +7,13 @@ Triggered every 100 events by a Dagster sensor (or run manually).
 The snapshot table drives the Grafana posterior distribution dashboard.
 """
 
-from __future__ import annotations
-
 import logging
 import os
 from datetime import datetime, timezone
 
 import redis
 import sqlalchemy as sa
-from dagster import Config, OpExecutionContext, job, op
+from dagster import Config, job, op
 
 logger = logging.getLogger(__name__)
 
@@ -48,9 +46,7 @@ def _dragonfly() -> redis.Redis:
 
 
 @op
-def read_posteriors_from_dragonfly(
-    context: OpExecutionContext, config: SnapshotConfig
-) -> list[dict]:
+def read_posteriors_from_dragonfly(context, config: SnapshotConfig) -> list[dict]:
     """Read alpha/beta for all arms of each experiment via pipelined MGET."""
     df = _dragonfly()
     rows = []
@@ -90,7 +86,7 @@ def read_posteriors_from_dragonfly(
 
 
 @op
-def write_snapshots_to_postgres(context: OpExecutionContext, rows: list[dict]) -> None:
+def write_snapshots_to_postgres(context, rows: list[dict]) -> None:
     """Write snapshot rows to posterior_snapshots table."""
     if not rows:
         context.log.info("No rows to write")

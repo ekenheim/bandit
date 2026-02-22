@@ -21,7 +21,7 @@ import numpy as np
 import redis
 import requests
 import sqlalchemy as sa
-from dagster import OpExecutionContext, job, op
+from dagster import job, op
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +65,7 @@ def _check_stopping_rule(
 
 
 @op
-def fetch_active_experiments(context: OpExecutionContext) -> list[str]:
+def fetch_active_experiments(context) -> list[str]:
     """Query Postgres for all experiments with status = 'running'."""
     if not PG_DSN:
         context.log.warning("PG_CONNECTION_STRING not set — returning empty experiment list")
@@ -81,7 +81,7 @@ def fetch_active_experiments(context: OpExecutionContext) -> list[str]:
 
 
 @op
-def check_and_conclude(context: OpExecutionContext, experiment_ids: list[str]) -> list[str]:
+def check_and_conclude(context, experiment_ids: list[str]) -> list[str]:
     """Check stopping rule for each experiment; mark concluded ones in Postgres."""
     if not experiment_ids:
         context.log.info("No active experiments to check")
@@ -119,7 +119,7 @@ def check_and_conclude(context: OpExecutionContext, experiment_ids: list[str]) -
 
 
 @op
-def post_grafana_annotations(context: OpExecutionContext, concluded_ids: list[str]) -> None:
+def post_grafana_annotations(context, concluded_ids: list[str]) -> None:
     """Post a Grafana annotation for each newly concluded experiment."""
     if not concluded_ids:
         return

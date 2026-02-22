@@ -9,8 +9,6 @@ The replay pumps events to:
   POST http://bandit-service.datasci.svc.cluster.local:8000/reward
 """
 
-from __future__ import annotations
-
 import logging
 import os
 import time
@@ -18,7 +16,7 @@ from typing import Any
 
 import httpx
 import numpy as np
-from dagster import Config, OpExecutionContext, job, op
+from dagster import Config, job, op
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +34,7 @@ class ReplayConfig(Config):
 
 
 @op
-def initialise_experiment(context: OpExecutionContext, config: ReplayConfig) -> str:
+def initialise_experiment(context, config: ReplayConfig) -> str:
     """Create experiment state in Dragonfly via bandit-service /experiments."""
     resp = httpx.post(
         f"{BANDIT_SERVICE_URL}/experiments",
@@ -48,7 +46,7 @@ def initialise_experiment(context: OpExecutionContext, config: ReplayConfig) -> 
 
 
 @op
-def load_obp_feedback(context: OpExecutionContext, config: ReplayConfig) -> dict[str, Any]:
+def load_obp_feedback(context, config: ReplayConfig) -> dict[str, Any]:
     """Load OBP bandit feedback for replay."""
     try:
         from obp.dataset import OpenBanditDataset
@@ -72,7 +70,7 @@ def load_obp_feedback(context: OpExecutionContext, config: ReplayConfig) -> dict
 
 @op
 def replay_events(
-    context: OpExecutionContext,
+    context,
     config: ReplayConfig,
     experiment_id: str,
     feedback: dict[str, Any],

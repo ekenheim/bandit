@@ -13,7 +13,7 @@ import logging
 import os
 
 import boto3
-from dagster import OpExecutionContext, job, op
+from dagster import job, op
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +34,7 @@ def _s3_client() -> boto3.client:
 
 
 @op
-def download_obp_dataset(context: OpExecutionContext) -> list[str]:
+def download_obp_dataset(context) -> list[str]:
     """
     Download OBP Parquet files.
 
@@ -66,7 +66,7 @@ def download_obp_dataset(context: OpExecutionContext) -> list[str]:
 
 
 @op
-def upload_to_minio(context: OpExecutionContext, local_paths: list[str]) -> None:
+def upload_to_minio(context, local_paths: list[str]) -> None:
     """Upload downloaded OBP files to MinIO bandit/raw/obp/."""
     if not local_paths:
         context.log.warning("No files to upload — skipping MinIO upload")
