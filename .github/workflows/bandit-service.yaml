@@ -2,7 +2,7 @@ name: Build bandit-service
 
 on:
   push:
-    branches: [main]
+    branches: [master]
     tags: ["v*.*.*"]
     paths:
       - "apps/bandit-service/**"
@@ -41,8 +41,8 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=ref,event=tag
-            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
-            type=sha,prefix=,enable=${{ github.ref == 'refs/heads/main' }}
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/master' }}
+            type=sha,prefix=,enable=${{ github.ref == 'refs/heads/master' }}
 
       - name: Build and push
         uses: docker/build-push-action@v6

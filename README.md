@@ -110,7 +110,7 @@ If port 3000 is in use, pass a different port: `uv run dagster dev -m pipeline.r
 
 ## Deployment
 
-1. Push to `main` with changes in `apps/bandit-service/**` or `apps/bandit-pipeline/**`.
+1. Push to `master` with changes in `apps/bandit-service/**` or `apps/bandit-pipeline/**`.
 2. GitHub Actions builds the corresponding image and pushes to `ghcr.io/ekenheim/bandit-service` or `ghcr.io/ekenheim/bandit-pipeline`.
 3. Update the image tag in the bandit app manifests in your **k8s repo** (e.g. `app/service/deployment.yaml`, `app/pipeline/deployment.yaml`, `app/seldon/seldondeployment.yaml`).
 4. FluxCD reconciles and rolls out the new image.
