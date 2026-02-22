@@ -1,4 +1,4 @@
-# Constrain obp's transitive deps to versions with Linux wheels. pandas<3 required by mlflow.
-torch>=2.0
+# Retained for local uv workspace overrides — see pyproject.toml tool.uv.override-dependencies.
+# pandas<3 required by mlflow; scikit-learn>=1.0 for manylinux wheels.
 pandas>=2.0,<3
 scikit-learn>=1.0

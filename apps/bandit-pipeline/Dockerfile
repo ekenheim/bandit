@@ -1,5 +1,4 @@
-# Python 3.9 required by obp 0.5.x (requires <3.10)
-FROM python:3.9-slim-bookworm
+FROM python:3.11-slim-bookworm
 
 RUN apt-get update && apt-get upgrade -y --no-install-recommends \
     && apt-get install -y --no-install-recommends \
@@ -11,12 +10,13 @@ WORKDIR /app
 
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
-# Pre-resolved lock (avoids pip resolution-too-deep). Regenerate from repo root with:
-#   uv pip compile apps/bandit-pipeline/requirements.txt -c apps/bandit-pipeline/constraints.txt \
-#     --python-version 3.9 --python-platform x86_64-manylinux2014 --torch-backend cpu \
+# Pre-resolved lock (avoids pip resolution-too-deep). obp excluded — its imports are try/except
+# with synthetic fallback. Regenerate from repo root with:
+#   uv pip compile apps/bandit-pipeline/requirements-docker.txt \
+#     --python-version 3.11 --python-platform x86_64-manylinux2014 \
 #     -o apps/bandit-pipeline/requirements-lock.txt
 COPY requirements-lock.txt ./
-RUN pip install --no-cache-dir --extra-index-url https://download.pytorch.org/whl/cpu -r requirements-lock.txt
+RUN pip install --no-cache-dir -r requirements-lock.txt
 
 COPY pipeline/ ./pipeline/
 
