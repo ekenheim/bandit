@@ -1,0 +1,155 @@
+"""Dagster job: conclude_experiments
+
+Periodically checks the posterior probability stopping rule for all active
+experiments. When P(arm k is best) > 0.95, marks the experiment as concluded
+in Postgres and posts an annotation to Grafana.
+
+Stopping rule:
+  P(θ_{k*} = max_k θ_k) > 0.95
+  Estimated via 10,000 Monte Carlo samples from each Beta posterior.
+
+This is valid at any sample size — no multiple-comparisons inflation.
+"""
+
+from __future__ import annotations
+
+import logging
+import os
+from datetime import datetime, timezone
+
+import numpy as np
+import redis
+import requests
+import sqlalchemy as sa
+from dagster import OpExecutionContext, job, op
+
+logger = logging.getLogger(__name__)
+
+DRAGONFLY_HOST = os.getenv("DRAGONFLY_HOST", "dragonfly.database.svc.cluster.local")
+DRAGONFLY_PORT = int(os.getenv("DRAGONFLY_PORT", "6379"))
+DRAGONFLY_DB = int(os.getenv("DRAGONFLY_DB", "2"))
+PG_DSN = os.getenv("PG_CONNECTION_STRING", "")
+GRAFANA_URL = os.getenv("GRAFANA_URL", "http://grafana.observability.svc.cluster.local")
+GRAFANA_TOKEN = os.getenv("GRAFANA_TOKEN", "")
+STOPPING_THRESHOLD = float(os.getenv("STOPPING_THRESHOLD", "0.95"))
+
+
+def _dragonfly() -> redis.Redis:
+    return redis.Redis(
+        host=DRAGONFLY_HOST, port=DRAGONFLY_PORT, db=DRAGONFLY_DB, decode_responses=True
+    )
+
+
+def _check_stopping_rule(
+    experiment_id: str, threshold: float = STOPPING_THRESHOLD, n_samples: int = 10_000
+) -> tuple[bool, int, list[float]]:
+    """Returns (should_conclude, winner_arm_id, p_best_per_arm)."""
+    df = _dragonfly()
+    exp_key = f"experiment:{experiment_id}"
+    n_arms = int(df.get(f"{exp_key}:n_arms") or 0)
+    if n_arms == 0:
+        return False, -1, []
+
+    keys = []
+    for k in range(n_arms):
+        keys.extend([f"{exp_key}:arm:{k}:alpha", f"{exp_key}:arm:{k}:beta"])
+    values = df.mget(keys)
+    alphas = [int(values[2 * k] or 1) for k in range(n_arms)]
+    betas = [int(values[2 * k + 1] or 1) for k in range(n_arms)]
+
+    samples = np.array([np.random.beta(a, b, size=n_samples) for a, b in zip(alphas, betas)])
+    p_best = (samples.argmax(axis=0)[:, None] == np.arange(n_arms)).mean(axis=0)
+
+    winner = int(p_best.argmax())
+    return bool(p_best[winner] >= threshold), winner, p_best.tolist()
+
+
+@op
+def fetch_active_experiments(context: OpExecutionContext) -> list[str]:
+    """Query Postgres for all experiments with status = 'running'."""
+    if not PG_DSN:
+        context.log.warning("PG_CONNECTION_STRING not set — returning empty experiment list")
+        return []
+    engine = sa.create_engine(PG_DSN)
+    with engine.connect() as conn:
+        rows = conn.execute(
+            sa.text("SELECT experiment_id::text FROM experiments WHERE status = 'running'")
+        ).fetchall()
+    experiment_ids = [row[0] for row in rows]
+    context.log.info(f"Found {len(experiment_ids)} active experiments")
+    return experiment_ids
+
+
+@op
+def check_and_conclude(context: OpExecutionContext, experiment_ids: list[str]) -> list[str]:
+    """Check stopping rule for each experiment; mark concluded ones in Postgres."""
+    if not experiment_ids:
+        context.log.info("No active experiments to check")
+        return []
+
+    concluded = []
+    engine = sa.create_engine(PG_DSN) if PG_DSN else None
+
+    for exp_id in experiment_ids:
+        should_stop, winner, p_best = _check_stopping_rule(exp_id)
+        context.log.info(
+            f"Experiment {exp_id}: p_best={[f'{p:.3f}' for p in p_best]}, "
+            f"should_conclude={should_stop}"
+        )
+
+        if should_stop and engine:
+            with engine.begin() as conn:
+                conn.execute(
+                    sa.text(
+                        """
+                        UPDATE experiments
+                        SET status = 'concluded',
+                            winner_arm = :winner,
+                            concluded_at = :now
+                        WHERE experiment_id = :exp_id::uuid
+                          AND status = 'running'
+                        """
+                    ),
+                    {"winner": winner, "now": datetime.now(timezone.utc), "exp_id": exp_id},
+                )
+            context.log.info(f"Concluded experiment {exp_id} — winner: arm {winner}")
+            concluded.append(exp_id)
+
+    return concluded
+
+
+@op
+def post_grafana_annotations(context: OpExecutionContext, concluded_ids: list[str]) -> None:
+    """Post a Grafana annotation for each newly concluded experiment."""
+    if not concluded_ids:
+        return
+
+    if not GRAFANA_TOKEN:
+        context.log.warning("GRAFANA_TOKEN not set — skipping Grafana annotations")
+        return
+
+    headers = {"Authorization": f"Bearer {GRAFANA_TOKEN}", "Content-Type": "application/json"}
+    now_ms = int(datetime.now(timezone.utc).timestamp() * 1000)
+
+    for exp_id in concluded_ids:
+        payload = {
+            "time": now_ms,
+            "tags": ["bandit", "experiment-concluded"],
+            "text": f"Experiment {exp_id} concluded — winner declared at P(best) > {STOPPING_THRESHOLD}",
+        }
+        resp = requests.post(
+            f"{GRAFANA_URL}/api/annotations", json=payload, headers=headers, timeout=10
+        )
+        if resp.ok:
+            context.log.info(f"Posted Grafana annotation for experiment {exp_id}")
+        else:
+            context.log.warning(
+                f"Grafana annotation failed for {exp_id}: {resp.status_code} {resp.text}"
+            )
+
+
+@job(name="conclude_experiments")
+def conclude_experiments_job() -> None:
+    experiment_ids = fetch_active_experiments()
+    concluded = check_and_conclude(experiment_ids)
+    post_grafana_annotations(concluded)

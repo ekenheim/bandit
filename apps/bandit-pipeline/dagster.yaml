@@ -1,0 +1,16 @@
+# Dagster instance configuration for the bandit pipeline code location.
+# Lives at $DAGSTER_HOME/dagster.yaml (/opt/dagster/dagster.yaml in the container).
+#
+# python_logs.managed_python_loggers routes standard Python logging calls
+# (logging.info, logger.warning, etc.) into the Dagster event log so they
+# appear in the step-level "Logs" tab in the UI.
+
+python_logs:
+  python_log_level: INFO
+  managed_python_loggers:
+    - pipeline.jobs.ingest_obp
+    - pipeline.jobs.obp_replay
+    - pipeline.jobs.snapshot_posteriors
+    - pipeline.jobs.compute_regret
+    - pipeline.jobs.evaluate_ope
+    - pipeline.jobs.conclude_experiments

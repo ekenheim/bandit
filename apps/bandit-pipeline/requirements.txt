@@ -1,0 +1,27 @@
+# Dagster orchestration
+dagster>=1.8
+dagster-postgres>=0.24
+
+# Dragonfly / Redis
+redis>=5.0
+
+# Numerical
+numpy>=1.26
+scipy>=1.13
+
+# Off-policy evaluation
+obp>=0.5
+
+# Experiment tracking
+mlflow>=2.14
+
+# Storage
+boto3>=1.34
+sqlalchemy>=2.0
+psycopg2-binary>=2.9
+
+# Serialization
+pyarrow>=16.0
+
+# HTTP client (for replay simulator → bandit-service)
+httpx>=0.27
