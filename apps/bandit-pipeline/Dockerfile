@@ -10,8 +10,12 @@ WORKDIR /app
 
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
-COPY requirements.txt constraints.txt ./
-RUN pip install --no-cache-dir -c constraints.txt -r requirements.txt
+# Pre-resolved lock (avoids pip resolution-too-deep). Regenerate from repo root with:
+#   uv pip compile apps/bandit-pipeline/requirements.txt -c apps/bandit-pipeline/constraints.txt \
+#     --python-version 3.11 --python-platform x86_64-manylinux2014 --torch-backend cpu \
+#     -o apps/bandit-pipeline/requirements-lock.txt
+COPY requirements-lock.txt ./
+RUN pip install --no-cache-dir --extra-index-url https://download.pytorch.org/whl/cpu -r requirements-lock.txt
 
 COPY pipeline/ ./pipeline/
 
