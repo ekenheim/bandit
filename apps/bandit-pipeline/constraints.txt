@@ -1,0 +1,4 @@
+# Constrain obp's transitive deps to versions with Linux wheels (used in Docker only).
+torch>=2.0
+pandas>=2.0
+scikit-learn>=1.0
