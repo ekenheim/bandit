@@ -22,7 +22,7 @@ from dagster import Config, job, op
 
 logger = logging.getLogger(__name__)
 
-MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "http://mlflow.datasci.svc.cluster.local")
+MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "http://mlflow.datasci.svc.cluster.local:5000")
 
 
 class RegretConfig(Config):

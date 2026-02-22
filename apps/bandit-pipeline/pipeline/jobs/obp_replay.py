@@ -5,8 +5,8 @@ real-time traffic. This lets you observe posterior updates, allocation shifts,
 and convergence behaviour using real interaction data from a production system.
 
 The replay pumps events to:
-  POST http://bandit-service.datasci.svc.cluster.local:8000/select
-  POST http://bandit-service.datasci.svc.cluster.local:8000/reward
+  POST http://bandit-service.development.svc.cluster.local:8000/select
+  POST http://bandit-service.development.svc.cluster.local:8000/reward
 """
 
 import logging
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 BANDIT_SERVICE_URL = os.getenv(
     "BANDIT_SERVICE_URL",
-    "http://bandit-service.datasci.svc.cluster.local:8000",
+    "http://bandit-service.development.svc.cluster.local:8000",
 )
 
 
@@ -60,10 +60,13 @@ def load_obp_feedback(context, config: ReplayConfig) -> dict[str, Any]:
         context.log.warning(f"OBP not available ({exc}); generating synthetic feedback")
         rng = np.random.default_rng(42)
         n = config.n_events
+        arm_probs = [0.05, 0.08, 0.12, 0.15][: config.n_arms]
+        actions = rng.integers(0, config.n_arms, size=n)
+        rewards = np.array([rng.binomial(1, arm_probs[a]) for a in actions], dtype=float)
         return {
             "n_rounds": n,
-            "action": rng.integers(0, config.n_arms, size=n),
-            "reward": rng.binomial(1, [0.05, 0.08][: config.n_arms], size=n),
+            "action": actions,
+            "reward": rewards,
             "context": rng.standard_normal((n, 5)),
         }
 
