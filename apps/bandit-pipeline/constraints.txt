@@ -1,4 +1,4 @@
-# Constrain obp's transitive deps to versions with Linux wheels (used in Docker only).
+# Constrain obp's transitive deps to versions with Linux wheels. pandas<3 required by mlflow.
 torch>=2.0
-pandas>=2.0
+pandas>=2.0,<3
 scikit-learn>=1.0

@@ -233,7 +233,7 @@ packaging==26.0
     #   skops
     #   statsmodels
     #   xarray
-pandas==3.0.1
+pandas==2.3.3
     # via
     #   -c apps/bandit-pipeline/constraints.txt
     #   --override (workspace)
@@ -308,7 +308,9 @@ python-dotenv==1.2.1
     #   dagster
     #   mlflow-skinny
 pytz==2025.2
-    # via dagster
+    # via
+    #   dagster
+    #   pandas
 pyyaml==6.0.3
     # via
     #   --override (workspace)
@@ -428,7 +430,9 @@ typing-inspection==0.4.2
     #   fastapi
     #   pydantic
 tzdata==2025.3
-    # via dagster
+    # via
+    #   dagster
+    #   pandas
 universal-pathlib==0.3.10
     # via dagster
 urllib3==2.6.3
