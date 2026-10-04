@@ -238,7 +238,7 @@ pyyaml==6.0.3
     #   mlflow-skinny
 redis==7.0.1
     # via -r apps/bandit-pipeline/requirements-docker.txt
-requests==2.32.5
+requests==2.34.2
     # via
     #   dagster
     #   databricks-sdk
