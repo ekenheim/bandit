@@ -144,7 +144,7 @@ markupsafe==3.0.3
     #   jinja2
     #   mako
     #   werkzeug
-matplotlib==3.9.4
+matplotlib==3.11.2
     # via mlflow
 mdurl==0.1.2
     # via markdown-it-py
