@@ -281,7 +281,7 @@ structlog==25.5.0
     # via dagster
 tabulate==0.9.0
     # via dagster
-threadpoolctl==3.6.0
+threadpoolctl==3.7.0
     # via scikit-learn
 tomli==2.4.0
     # via dagster
