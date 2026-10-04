@@ -225,7 +225,7 @@ python-dateutil==2.9.0.post0
     #   graphene
     #   matplotlib
     #   pandas
-python-dotenv==1.2.1
+python-dotenv==1.2.4
     # via dagster
 pytz==2025.2
     # via
