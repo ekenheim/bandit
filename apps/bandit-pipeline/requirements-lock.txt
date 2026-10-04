@@ -259,7 +259,7 @@ scipy==1.13.1
     #   -r apps/bandit-pipeline/requirements-docker.txt
     #   mlflow
     #   scikit-learn
-setuptools==81.0.0
+setuptools==84.0.0
     # via dagster
 six==1.17.0
     # via
