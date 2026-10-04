@@ -254,7 +254,7 @@ scikit-learn==1.6.1
     # via
     #   --override (workspace)
     #   mlflow
-scipy==1.13.1
+scipy==1.18.1
     # via
     #   -r apps/bandit-pipeline/requirements-docker.txt
     #   mlflow
