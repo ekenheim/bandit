@@ -236,7 +236,7 @@ pyyaml==6.0.3
     #   --override (workspace)
     #   dagster-shared
     #   mlflow-skinny
-redis==7.0.1
+redis==7.4.1
     # via -r apps/bandit-pipeline/requirements-docker.txt
 requests==2.32.5
     # via
