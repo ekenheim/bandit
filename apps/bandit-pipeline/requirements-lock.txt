@@ -6,7 +6,7 @@ alembic==1.16.5
     #   mlflow
 annotated-doc==0.0.4
     # via fastapi
-annotated-types==0.7.0
+annotated-types==0.8.0
     # via pydantic
 antlr4-python3-runtime==4.13.2
     # via dagster
