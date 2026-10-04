@@ -265,7 +265,7 @@ six==1.17.0
     # via
     #   dagster
     #   python-dateutil
-smmap==5.0.2
+smmap==5.0.3
     # via gitdb
 sqlalchemy==2.0.46
     # via
