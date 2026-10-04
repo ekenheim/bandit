@@ -291,7 +291,7 @@ toposort==1.10
     # via dagster
 tqdm==4.67.3
     # via dagster
-typing-extensions==4.15.0
+typing-extensions==4.16.0
     # via
     #   alembic
     #   anyio
