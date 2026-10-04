@@ -97,7 +97,7 @@ grpcio==1.78.1
     # via
     #   dagster
     #   grpcio-health-checking
-grpcio-health-checking==1.78.1
+grpcio-health-checking==1.84.0
     # via dagster
 gunicorn==23.0.0
     # via mlflow
