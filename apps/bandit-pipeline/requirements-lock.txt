@@ -65,7 +65,7 @@ databricks-sdk==0.91.0
     # via mlflow-skinny
 docker==7.1.0
     # via mlflow
-docstring-parser==0.17.0
+docstring-parser==0.18.0
     # via dagster
 fastapi==0.128.8
     # via mlflow-skinny
