@@ -285,7 +285,7 @@ threadpoolctl==3.6.0
     # via scikit-learn
 tomli==2.4.0
     # via dagster
-tomlkit==0.14.0
+tomlkit==0.15.1
     # via dagster-shared
 toposort==1.10
     # via dagster
