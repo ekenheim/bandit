@@ -170,7 +170,7 @@ opentelemetry-sdk==1.39.1
     # via mlflow-skinny
 opentelemetry-semantic-conventions==0.60b1
     # via opentelemetry-sdk
-packaging==25.0
+packaging==26.3
     # via
     #   dagster-shared
     #   gunicorn
