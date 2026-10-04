@@ -176,7 +176,7 @@ packaging==25.0
     #   gunicorn
     #   matplotlib
     #   mlflow-skinny
-pandas==2.3.3
+pandas==3.0.6
     # via
     #   --override (workspace)
     #   mlflow
