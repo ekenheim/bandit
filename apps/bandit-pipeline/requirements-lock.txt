@@ -93,7 +93,7 @@ graphql-relay==3.2.0
     # via graphene
 greenlet==3.2.5
     # via sqlalchemy
-grpcio==1.78.1
+grpcio==1.84.0
     # via
     #   dagster
     #   grpcio-health-checking
