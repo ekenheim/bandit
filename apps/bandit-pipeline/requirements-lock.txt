@@ -289,7 +289,7 @@ tomlkit==0.14.0
     # via dagster-shared
 toposort==1.10
     # via dagster
-tqdm==4.67.3
+tqdm==4.70.1
     # via dagster
 typing-extensions==4.15.0
     # via
