@@ -312,7 +312,7 @@ typing-inspection==0.4.2
     # via
     #   fastapi
     #   pydantic
-tzdata==2025.3
+tzdata==2026.5
     # via
     #   dagster
     #   pandas
