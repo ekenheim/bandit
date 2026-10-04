@@ -192,7 +192,7 @@ protobuf==6.33.5
     #   databricks-sdk
     #   grpcio-health-checking
     #   mlflow-skinny
-psycopg2-binary==2.9.11
+psycopg2-binary==2.9.13
     # via
     #   -r apps/bandit-pipeline/requirements-docker.txt
     #   dagster-postgres
