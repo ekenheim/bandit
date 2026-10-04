@@ -85,7 +85,7 @@ google-auth==2.48.0
     # via databricks-sdk
 graphene==3.4.3
     # via mlflow
-graphql-core==3.2.7
+graphql-core==3.3.0
     # via
     #   graphene
     #   graphql-relay
