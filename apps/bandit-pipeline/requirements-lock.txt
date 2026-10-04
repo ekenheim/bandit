@@ -327,7 +327,7 @@ uvicorn==0.39.0
     # via mlflow-skinny
 watchdog==6.0.0
     # via dagster
-werkzeug==3.1.6
+werkzeug==3.1.9
     # via flask
 zipp==3.23.0
     # via importlib-metadata
