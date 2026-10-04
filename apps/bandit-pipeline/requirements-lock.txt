@@ -63,7 +63,7 @@ dagster-shared==1.12.1
     # via dagster
 databricks-sdk==0.91.0
     # via mlflow-skinny
-docker==7.1.0
+docker==7.2.0
     # via mlflow
 docstring-parser==0.17.0
     # via dagster
