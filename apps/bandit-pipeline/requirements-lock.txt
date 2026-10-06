@@ -24,7 +24,7 @@ botocore==1.42.54
     # via
     #   boto3
     #   s3transfer
-cachetools==6.2.6
+cachetools==7.2.1
     # via mlflow-skinny
 certifi==2026.1.4
     # via
