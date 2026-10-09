@@ -267,7 +267,7 @@ six==1.17.0
     #   python-dateutil
 smmap==5.0.2
     # via gitdb
-sqlalchemy==2.0.46
+sqlalchemy==2.1.4
     # via
     #   -r apps/bandit-pipeline/requirements-docker.txt
     #   alembic
