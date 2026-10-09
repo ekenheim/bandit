@@ -213,7 +213,7 @@ pydantic==2.12.5
     #   dagster-shared
     #   fastapi
     #   mlflow-skinny
-pydantic-core==2.41.5
+pydantic-core==2.50.0
     # via pydantic
 pygments==2.19.2
     # via rich
