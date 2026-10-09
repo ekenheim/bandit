@@ -81,7 +81,7 @@ gitdb==4.0.12
     # via gitpython
 gitpython==3.1.46
     # via mlflow-skinny
-google-auth==2.48.0
+google-auth==2.61.0
     # via databricks-sdk
 graphene==3.4.3
     # via mlflow
