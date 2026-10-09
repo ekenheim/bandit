@@ -67,7 +67,7 @@ docker==7.1.0
     # via mlflow
 docstring-parser==0.17.0
     # via dagster
-fastapi==0.128.8
+fastapi==0.143.0
     # via mlflow-skinny
 filelock==3.19.1
     # via dagster
