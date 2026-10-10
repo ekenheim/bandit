@@ -61,7 +61,7 @@ dagster-postgres==0.28.1
     # via -r apps/bandit-pipeline/requirements-docker.txt
 dagster-shared==1.12.1
     # via dagster
-databricks-sdk==0.91.0
+databricks-sdk==0.151.0
     # via mlflow-skinny
 docker==7.1.0
     # via mlflow
