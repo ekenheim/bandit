@@ -196,7 +196,7 @@ psycopg2-binary==2.9.11
     # via
     #   -r apps/bandit-pipeline/requirements-docker.txt
     #   dagster-postgres
-pyarrow==20.0.0
+pyarrow==26.0.0
     # via
     #   -r apps/bandit-pipeline/requirements-docker.txt
     #   mlflow
