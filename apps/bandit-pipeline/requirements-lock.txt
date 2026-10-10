@@ -51,7 +51,7 @@ cryptography==46.0.5
     # via google-auth
 cycler==0.12.1
     # via matplotlib
-dagster==1.12.1
+dagster==1.13.26
     # via
     #   -r apps/bandit-pipeline/requirements-docker.txt
     #   dagster-postgres
