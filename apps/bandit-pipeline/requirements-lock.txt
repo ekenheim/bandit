@@ -18,9 +18,9 @@ async-timeout==5.0.1
     # via redis
 blinker==1.9.0
     # via flask
-boto3==1.42.54
+boto3==1.43.118
     # via -r apps/bandit-pipeline/requirements-docker.txt
-botocore==1.42.54
+botocore==1.43.118
     # via
     #   boto3
     #   s3transfer
@@ -248,7 +248,7 @@ rich==14.3.3
     # via dagster
 rsa==4.9.1
     # via google-auth
-s3transfer==0.16.0
+s3transfer==0.19.3
     # via boto3
 scikit-learn==1.6.1
     # via
